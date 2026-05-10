@@ -104,8 +104,17 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <!-- PANTALLA GENERAR COBRO -->
     <string name="payment_tv_titulo">Generar Cobro</string>
     <string name="payment_et_hint_buscar_cliente">DNI o Nro Cliente</string>
+    <string name="payment_btn_cobrar">Cobrar</string>
+    <!-- Datos simulados -->
     <string name="payment_tv_nombre_socio">Socio: Juan Pérez</string>
     <string name="payment_tv_nombre_no_socio">No Socio: María García</string>
-    <string name="payment_btn_cobrar">Cobrar</string>
+    <string name="payment_tv_dni">DNI: 12.345.678</string>
+    <string name="payment_tv_telefono">Tel: 11-2233-4455</string>
+    <string name="payment_tv_fecha_ingreso">Ingreso: 10/05/2024</string>
+    <string name="payment_tv_nro_socio">Nro Socio: #00123</string>
+    <string name="payment_tv_estado">Estado: Activo</string>
+    <string name="payment_tv_deuda_pendiente">Deuda: $5.500</string>
+    <string name="payment_tv_monto_pagar">Monto a Pagar: $1.200</string>
+    <string name="payment_tv_actividad_gimnasio">Actividad: Gimnasio (Pase Diario)</string>
 
 </resources>

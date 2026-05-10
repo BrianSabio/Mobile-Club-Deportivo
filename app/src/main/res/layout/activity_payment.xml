@@ -77,15 +77,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_nombre_socio"
-                android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_dni"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_nro_socio"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_estado"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_deuda_pendiente"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
 
             <Button
                 android:id="@+id/btn_payment_pay_fee"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:text="@string/payment_btn_cobrar"
-                android:padding="12dp" />
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -100,15 +128,44 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_nombre_no_socio"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_dni"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_telefono"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_actividad_gimnasio"
                 android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_monto_pagar"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp" />
 
             <Button
                 android:id="@+id/btn_payment_pay_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="56dp"
                 android:text="@string/payment_btn_cobrar"
-                android:padding="12dp" />
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>
