@@ -54,7 +54,7 @@
             android:layout_marginBottom="60dp" />
 
         <Button
-            android:id="@+id/btn_main_turnos"
+            android:id="@+id/btn_main_register"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginBottom="16dp"
@@ -63,7 +63,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_main_pagos"
+            android:id="@+id/btn_main_payment"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginBottom="16dp"
@@ -72,7 +72,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btn_main_perfil"
+            android:id="@+id/btn_main_manage"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:layout_marginBottom="32dp"
