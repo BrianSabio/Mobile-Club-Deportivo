@@ -3,9 +3,7 @@ package com.example.mobile_club_deportivo.app
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,15 +18,19 @@ class MainActivity : AppCompatActivity() {
             val username = etUsername.text.toString().trim()
             val password = etPassword.text.toString().trim()
 
-            if (username.isEmpty() || password.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    "Complete todos los campos",
-                    Toast.LENGTH_SHORT
-                ).show()
-
+            if (username.isEmpty()) {
+                etUsername.error = "El usuario es obligatorio"
+                etUsername.requestFocus()
+                return@setOnClickListener
             }
-            else if (username == "admin" && password == "admin") {
+
+            if (password.isEmpty()) {
+                etPassword.error = "La contraseña es obligatoria"
+                etPassword.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (username == "admin" && password == "admin") {
                 val intent = Intent(this, MainMenuActivity::class.java)
                 startActivity(intent)
                 finish()
@@ -39,7 +41,6 @@ class MainActivity : AppCompatActivity() {
                     "Usuario o contraseña incorrectos",
                     Toast.LENGTH_SHORT
                 ).show()
-
             }
         }
     }

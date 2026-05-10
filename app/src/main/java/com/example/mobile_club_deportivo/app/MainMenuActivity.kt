@@ -22,7 +22,8 @@ class MainMenuActivity : AppCompatActivity() {
         }
 
         btnPayment.setOnClickListener {
-
+            val intent = Intent(this, PaymentActivity::class.java)
+            startActivity(intent)
         }
 
         btnManage.setOnClickListener {

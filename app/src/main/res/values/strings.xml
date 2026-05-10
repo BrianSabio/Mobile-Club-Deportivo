@@ -16,8 +16,10 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="global_socio">Socio</string>
     <string name="global_no_socio">No Socio</string>
     <!-- Content Description -->
-    <string name="global_cd_back">Volver atrás</string>
-    <string name="global_cd_apt_fisico">Apto físico</string>
+    <string name="global_cd_volver">Botón volver atrás</string>
+    <string name="global_cd_apto_fisico">Checkbox apto físico</string>
+    <string name="payment_cd_buscar">Botón para ejecutar la búsqueda del cliente</string>
+
 
     <!-- PANTALLA LOGIN -->
     <string name="login_tv_bienvenida">Bienvenido a la app móvil del Club Deportivo</string>
@@ -100,14 +102,10 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="manage_mock_estado_5">No socio</string>
 
     <!-- PANTALLA GENERAR COBRO -->
-    <string name="payment_et_hint_buscar_cliente">Buscar cliente por DNI</string>
-    <string name="payment_tv_advertencia">Ingrese un DNI para cargar las opciones de cobro</string>
-    <string name="payment_tv_nombre">Nombre del cliente</string>
-    <string name="payment_tv_estado">Estado</string>
-    <string name="payment_btn_medio_pago">Medio de pago</string>
-    <string name="payment_btn_actividad">Actividad</string>
-    <string name="payment_btn_cantidad_cuotas">Cantidad de cuotas</string>
-    <string name="payment_tv_monto">Monto</string>
-    <string name="payment_et_hint_valor_pesos">Valor en pesos</string>
-    <string name="payment_btn_comprobante">Descargar comprobante</string>
+    <string name="payment_tv_titulo">Generar Cobro</string>
+    <string name="payment_et_hint_buscar_cliente">DNI o Nro Cliente</string>
+    <string name="payment_tv_nombre_socio">Socio: Juan Pérez</string>
+    <string name="payment_tv_nombre_no_socio">No Socio: María García</string>
+    <string name="payment_btn_cobrar">Cobrar</string>
+
 </resources>

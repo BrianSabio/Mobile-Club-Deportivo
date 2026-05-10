@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingBottom="16dp"
+    android:paddingTop="28dp"
     tools:context=".ManageActivity">
-
-    <!-- HEADER -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +26,7 @@
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:src="@drawable/arrow_back_24px"
-            android:contentDescription="@string/global_cd_back" />
+            android:contentDescription="@string/global_cd_volver" />
 
         <TextView
             android:id="@+id/tv_manage_username"
@@ -38,8 +39,6 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-
-    <!-- INFORMACIÓN GENERAL -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -82,8 +81,6 @@
 
     </LinearLayout>
 
-    <!-- BOTÓN -->
-
     <Button
         android:id="@+id/btn_manage_update"
         android:layout_width="match_parent"
@@ -92,8 +89,6 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:layout_marginBottom="12dp" />
-
-    <!-- BUSCADOR -->
 
     <EditText
         android:id="@+id/et_manage_search"
@@ -106,8 +101,6 @@
         android:inputType="textPersonName"
         android:autofillHints="name"
         android:layout_marginBottom="16dp" />
-
-    <!-- LISTADO -->
 
     <ScrollView
         android:layout_width="match_parent"
