@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mobile_club_deportivo">
         <activity
+            android:name=".ManageActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegisterClientActivity"
             android:exported="false" />
         <activity

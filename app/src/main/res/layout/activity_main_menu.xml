@@ -10,16 +10,26 @@
     android:padding="16dp"
     tools:context=".MainMenuActivity">
 
-    <TextView
-        android:id="@+id/tv_main_welcome"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="30"
-        android:gravity="center"
-        android:text="@string/main_tv_bienvenida"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="20dp" />
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tv_register_username"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/global_nombre_usuario"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -31,6 +41,17 @@
         android:orientation="vertical"
         android:gravity="center"
         android:background="@drawable/bg_contenedor_borde">
+
+        <TextView
+            android:id="@+id/tv_main_welcome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/main_tv_bienvenida"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginTop="-40dp"
+            android:layout_marginBottom="60dp" />
 
         <Button
             android:id="@+id/btn_main_turnos"

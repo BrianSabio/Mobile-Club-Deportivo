@@ -1,8 +1,9 @@
 <!--
 ABREVIATURAS
-tv_ para TextView (Etiquetas de texto).
-et_ para EditText (Campos donde el usuario escribe).
+tv_ para TextView
+et_ para EditText
 btn_ para Button
+cd_ para Content Description (Descripciones de accesibilidad).
 -->
 
 <resources>
@@ -14,6 +15,9 @@ btn_ para Button
     <string name="global_nombre_usuario">Nombre de Usuario</string>
     <string name="global_socio">Socio</string>
     <string name="global_no_socio">No Socio</string>
+    <!-- Content Description -->
+    <string name="global_cd_back">Volver atrás</string>
+    <string name="global_cd_apt_fisico">Apto físico</string>
 
     <!-- PANTALLA LOGIN -->
     <string name="login_tv_bienvenida">Bienvenido a la app móvil del Club Deportivo</string>
@@ -26,7 +30,7 @@ btn_ para Button
     <!-- PANTALLA MENÚ PRINCIPAL -->
     <string name="main_tv_bienvenida">Menú Principal</string>
     <string name="main_btn_logout">Cerrar Sesión</string>
-    
+
     <!-- PANTALLA REGISTRAR CLIENTE -->
     <string name="register_tv_nombre_apellido">Nombre y apellido</string>
     <string name="register_tv_dni">DNI / Documento</string>
@@ -38,19 +42,62 @@ btn_ para Button
     <string name="register_et_hint_dni">Ingrese número de documento</string>
     <string name="register_et_hint_numero_telefono">Ingrese número de teléfono</string>
     <string name="register_et_hint_email">Ingrese email</string>
+    <string name="register_et_hint_fecha_nacimiento">DD/MM/YYYY</string>
     <string name="register_btn_registrar">Registrar</string>
 
     <!-- PANTALLA GESTIONAR -->
-    <string name="manage_btn_deudores">Deudores</string>
-    <string name="manage_btn_listado">Listado</string>
-    <string name="manage_tv_deudores_hoy">Socios con deuda hoy</string>
+    <string name="manage_btn_actualizar_listado">Actualizar listado</string>
+    <string name="manage_tv_socios_deuda">Socios con deuda hoy</string>
+    <string name="manage_tv_fecha_actual">Fecha actual</string>
+    <string name="manage_et_hint_buscar_cliente">Buscar cliente por nombre...</string>
     <string name="manage_tv_dni">DNI</string>
     <string name="manage_tv_tel">Tel</string>
-    <string name="manage_tv_numero_socio">N° socio</string>
-    <string name="manage_btn_cobrar">Cobrar</string>
-    <string name="manage_tv_deuda">Deuda</string>
     <string name="manage_tv_fecha_nacimiento">Fec. nac</string>
+    <string name="manage_tv_numero_socio">N° socio</string>
+    <string name="manage_tv_estado">Estado</string>
+    <string name="manage_tv_deuda">Deuda</string>
+    <string name="manage_btn_cobrar">Cobrar</string>
     <string name="manage_btn_carnet">Carnet</string>
+
+    <!-- Datos simulados -->
+    <string name="manage_mock_fecha_hoy">10 / 05 / 2026</string>
+    <string name="manage_mock_cantidad_deudores">2 socios con deuda</string>
+
+    <string name="manage_mock_nombre_1">Mario Santos</string>
+    <string name="manage_mock_dni_1">40.143.479</string>
+    <string name="manage_mock_tel_1">2212057866</string>
+    <string name="manage_mock_fecha_1">05/12/1993</string>
+    <string name="manage_mock_numero_socio_1">1004</string>
+    <string name="manage_mock_estado_1">Socio</string>
+    <string name="manage_mock_deuda_1">$29.000</string>
+
+    <string name="manage_mock_nombre_2">Laura Morales</string>
+    <string name="manage_mock_dni_2">33.553.481</string>
+    <string name="manage_mock_tel_2">1157185945</string>
+    <string name="manage_mock_fecha_2">12/10/1987</string>
+    <string name="manage_mock_numero_socio_2">1009</string>
+    <string name="manage_mock_estado_2">Socio</string>
+    <string name="manage_mock_deuda_2">$25.000</string>
+
+    <string name="manage_mock_nombre_3">Ramiro Acosta</string>
+    <string name="manage_mock_dni_3">38.884.210</string>
+    <string name="manage_mock_tel_3">2235478812</string>
+    <string name="manage_mock_fecha_3">03/08/1991</string>
+    <string name="manage_mock_numero_socio_3">1015</string>
+    <string name="manage_mock_estado_3">Socio</string>
+    <string name="manage_mock_deuda_3">Sin deuda</string>
+
+    <string name="manage_mock_nombre_4">Lucía Fernández</string>
+    <string name="manage_mock_dni_4">42.778.932</string>
+    <string name="manage_mock_tel_4">1163347821</string>
+    <string name="manage_mock_fecha_4">18/01/1998</string>
+    <string name="manage_mock_estado_4">No socio</string>
+
+    <string name="manage_mock_nombre_5">Tomás Ruiz</string>
+    <string name="manage_mock_dni_5">39.120.664</string>
+    <string name="manage_mock_tel_5">2236014478</string>
+    <string name="manage_mock_fecha_5">27/06/1995</string>
+    <string name="manage_mock_estado_5">No socio</string>
 
     <!-- PANTALLA GENERAR COBRO -->
     <string name="payment_et_hint_buscar_cliente">Buscar cliente por DNI</string>
