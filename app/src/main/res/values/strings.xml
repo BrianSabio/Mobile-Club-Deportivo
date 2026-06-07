@@ -8,7 +8,7 @@ cd_ para Content Description (Descripciones de accesibilidad).
 
 <resources>
     <!-- GLOBAL -->
-    <string name="app_name">Mobile_club_deportivo</string>
+    <string name="app_name">Club Deportivo Móvil</string>
     <string name="global_registrar">Registrar Cliente</string>
     <string name="global_cobro">Generar Cobro</string>
     <string name="global_gestionar">Gestionar</string>
