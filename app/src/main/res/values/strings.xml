@@ -28,6 +28,9 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="login_et_hint_usuario">Ingrese su usuario</string>
     <string name="login_et_hint_clave">Ingrese su contraseña</string>
     <string name="login_btn_login">Login</string>
+    <string name="login_error_usuario">El usuario es obligatorio</string>
+    <string name="login_error_clave">La contraseña es obligatoria</string>
+    <string name="login_error_credenciales">Usuario o contraseña incorrectos</string>
 
     <!-- PANTALLA MENÚ PRINCIPAL -->
     <string name="main_tv_bienvenida">Menú Principal</string>
@@ -47,6 +50,16 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="register_et_hint_fecha_nacimiento">DD/MM/YYYY</string>
     <string name="register_btn_registrar">Registrar</string>
 
+    <!-- VALIDACIONES REGISTRO -->
+    <string name="register_error_nombre">Ingrese nombre y apellido (mínimo dos palabras)</string>
+    <string name="register_error_dni">Ingrese un DNI válido (7 a 9 dígitos)</string>
+    <string name="register_error_telefono">Ingrese un número de teléfono válido</string>
+    <string name="register_error_email">Ingrese un correo electrónico válido</string>
+    <string name="register_error_apto">No se puede registrar al cliente sin el Apto Físico vigente</string>
+    <string name="register_error_dni_existe">Este DNI ya se encuentra registrado</string>
+    <string name="register_success">Cliente registrado con éxito (ID: %1$d)</string>
+    <string name="register_error_db">Error al guardar en la base de datos</string>
+
     <!-- PANTALLA GESTIONAR -->
     <string name="manage_btn_actualizar_listado">Actualizar listado</string>
     <string name="manage_tv_socios_deuda">Socios con deuda hoy</string>
@@ -60,6 +73,8 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="manage_tv_deuda">Deuda: %1$s</string>
     <string name="manage_btn_cobrar">Cobrar</string>
     <string name="manage_btn_carnet">Carnet</string>
+    <string name="manage_error_vacio">No se encontraron clientes</string>
+    <string name="manage_toast_actualizado">Listado actualizado</string>
     <string name="manage_tv_cantidad_deudores">Cantidad de deudores: %1$d</string>
     <string name="manage_tv_fecha_hoy">Fecha: %1$s</string>
 
@@ -79,6 +94,12 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="payment_tv_deuda_pendiente">Deuda: %1$s</string>
     <string name="payment_tv_monto_pagar">Monto a Pagar: %1$s</string>
     <string name="payment_tv_actividad_gimnasio">Actividad: %1$s</string>
+    <string name="payment_error_busqueda">Ingrese un DNI o Nro Socio</string>
+    <string name="payment_success_busqueda">Cliente encontrado</string>
+    <string name="payment_error_no_encontrado">Cliente no encontrado</string>
+    <string name="payment_success_cobro">Cobro registrado con éxito via %1$s. ID: %2$d</string>
+    <string name="payment_error_cobro">Error al procesar el cobro</string>
+    <string name="payment_tv_sin_deuda_desc">Sin deudas pendientes</string>
     <string name="payment_tv_metodo_pago">Seleccione método de pago:</string>
     <string name="payment_rb_efectivo">Efectivo</string>
     <string name="payment_rb_debito">Débito</string>

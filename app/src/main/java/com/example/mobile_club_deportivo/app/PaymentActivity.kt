@@ -49,7 +49,7 @@ class PaymentActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 val busqueda = etSearch.text.toString().trim()
                 if (busqueda.isEmpty()) {
-                    etSearch.error = "Ingrese un DNI o Nro Socio"
+                    etSearch.error = getString(R.string.payment_error_busqueda)
                     return@setOnEditorActionListener true
                 }
                 buscarCliente(busqueda)
@@ -86,11 +86,11 @@ class PaymentActivity : AppCompatActivity() {
                 layoutNoSocio.visibility = View.VISIBLE
                 actualizarVistaNoSocio(cliente)
             }
-            Toast.makeText(this, "Cliente encontrado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.payment_success_busqueda), Toast.LENGTH_SHORT).show()
         } else {
             layoutSocio.visibility = View.GONE
             layoutNoSocio.visibility = View.GONE
-            Toast.makeText(this, "Cliente no encontrado", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.payment_error_no_encontrado), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -113,7 +113,7 @@ class PaymentActivity : AppCompatActivity() {
         } else {
             tvEstado.text = getString(R.string.payment_tv_sin_deuda)
             tvEstado.setTextColor(android.graphics.Color.GREEN)
-            tvDeuda.text = "Sin deudas pendientes"
+            tvDeuda.text = getString(R.string.payment_tv_sin_deuda_desc)
             findViewById<Button>(R.id.btn_payment_pay_fee).isEnabled = false
         }
     }
@@ -152,6 +152,7 @@ class PaymentActivity : AppCompatActivity() {
         cal.add(Calendar.MONTH, 1)
         val fechaVenc = sdf.format(cal.time)
 
+        // Lógica profesional basada en AppConfig
         val monto = if (cliente.tipo == TipoCliente.SOCIO) AppConfig.MONTO_CUOTA_SOCIO else AppConfig.MONTO_ACTIVIDAD_NO_SOCIO
         val desc = if (cliente.tipo == TipoCliente.SOCIO) AppConfig.DESC_CUOTA_SOCIO else AppConfig.DESC_ACTIVIDAD_GYM
         
@@ -169,10 +170,10 @@ class PaymentActivity : AppCompatActivity() {
 
         val id = cobroDAO.registrarCobro(nuevoCobro)
         if (id != -1L) {
-            Toast.makeText(this, "Cobro registrado con éxito via $medioPago. ID: $id", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, getString(R.string.payment_success_cobro, medioPago, id), Toast.LENGTH_LONG).show()
             finish()
         } else {
-            Toast.makeText(this, "Error al procesar el cobro", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.payment_error_cobro), Toast.LENGTH_SHORT).show()
         }
     }
 

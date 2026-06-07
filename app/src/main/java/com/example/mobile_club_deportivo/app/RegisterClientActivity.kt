@@ -72,27 +72,46 @@ class RegisterClientActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val aptoFisico = cbApto.isChecked
 
-            if (nombreCompleto.isEmpty()) {
-                etNombre.error = "Ingrese el nombre completo"
+            // 1. Validación de Nombre y Apellido (Al menos dos palabras)
+            if (nombreCompleto.isEmpty() || !nombreCompleto.contains(" ")) {
+                etNombre.error = getString(R.string.register_error_nombre)
                 etNombre.requestFocus()
                 return@setOnClickListener
             }
 
-            if (dni.isEmpty()) {
-                etDni.error = "El DNI es obligatorio"
+            // 2. Validación de DNI (Numérico y longitud razonable)
+            if (dni.isEmpty() || dni.length < 7 || dni.length > 9) {
+                etDni.error = getString(R.string.register_error_dni)
                 etDni.requestFocus()
                 return@setOnClickListener
             }
 
-            if (telefono.isEmpty()) {
-                etTelefono.error = "El teléfono es obligatorio"
+            // 3. Validación de Teléfono (Longitud mínima)
+            if (telefono.isEmpty() || telefono.length < 8) {
+                etTelefono.error = getString(R.string.register_error_telefono)
                 etTelefono.requestFocus()
                 return@setOnClickListener
             }
 
-            if (email.isEmpty()) {
-                etEmail.error = "El email es obligatorio"
+            // 4. Validación de Email (Regex profesional)
+            val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+            if (email.isEmpty() || !email.matches(emailPattern.toRegex())) {
+                etEmail.error = getString(R.string.register_error_email)
                 etEmail.requestFocus()
+                return@setOnClickListener
+            }
+
+            // 5. Validación de Fecha de Nacimiento (OPCIONAL según documento técnico)
+            // Ya no se bloquea si fechaSeleccionada es null
+
+            // 6. REGLA DE NEGOCIO: Apto físico obligatorio
+            if (!aptoFisico) {
+                Toast.makeText(
+                    this,
+                    getString(R.string.register_error_apto),
+                    Toast.LENGTH_LONG
+                ).show()
+                cbApto.requestFocus()
                 return@setOnClickListener
             }
 
@@ -101,7 +120,7 @@ class RegisterClientActivity : AppCompatActivity() {
             val apellido = if (partes.size > 1) partes[1] else ""
 
             if (clienteDAO.existeDni(dni)) {
-                etDni.error = "Este DNI ya se encuentra registrado"
+                etDni.error = getString(R.string.register_error_dni_existe)
                 etDni.requestFocus()
                 return@setOnClickListener
             }
@@ -126,10 +145,10 @@ class RegisterClientActivity : AppCompatActivity() {
             val resultadoId = clienteDAO.registrarCliente(nuevoCliente)
 
             if (resultadoId != -1L) {
-                Toast.makeText(this, "Cliente registrado con éxito (ID: $resultadoId)", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.register_success, resultadoId), Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(this, "Error al guardar en la base de datos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.register_error_db), Toast.LENGTH_SHORT).show()
             }
         }
     }

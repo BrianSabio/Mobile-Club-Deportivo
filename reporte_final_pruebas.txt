@@ -1,0 +1,38 @@
+REPORTE FINAL DE PRUEBAS Y CALIDAD - CLUB DEPORTIVO MOBILE
+=========================================================
+Fecha: Junio 2026
+Estado: Proyecto Finalizado (MVP Robusto)
+
+1. RESUMEN DE CAMBIOS FINALES (CALIDAD)
+---------------------------------------
+* Opcionalidad de Datos: Se ajustó el registro de clientes para que la 'Fecha de Nacimiento' sea opcional, respetando estrictamente el documento técnico y el DER.
+* Desacoplamiento de Strings: Se eliminó el 100% del hardcoding en el código Kotlin. Todos los mensajes de error, validaciones y avisos de éxito se gestionan ahora desde 'strings.xml'.
+* Lógica de Deuda Dinámica: Se corrigió el fallo de actualización. El sistema ahora consulta en tiempo real la tabla COBRO para determinar si un cliente está al día o tiene deudas.
+* Métodos de Pago: Se implementó la selección triple: Efectivo, Débito y Crédito.
+
+2. BATERÍA DE PRUEBAS (RESULTADOS)
+----------------------------------
+[PASÓ] Flujo de Autenticación: Login real, hasheo SHA-256 y persistencia de sesión con SessionManager.
+[PASÓ] Registro de Clientes:
+    - Validación de Apto Físico (Bloqueante).
+    - Validación de Email y Nombre (Regex).
+    - Fecha opcional (Selector nativo).
+[PASÓ] Gestión y Listado: Carga dinámica desde DB, placeholders en etiquetas y ocultamiento automático de teclado.
+[PASÓ] Sistema de Cobros:
+    - Búsqueda por DNI/Socio.
+    - Cambio de estado visual (Verde/Rojo) tras el pago.
+    - Registro persistente de montos desde AppConfig.
+[PASÓ] Carnet Digital: Generación de PDF nativo con datos reales y guardado en carpeta de Descargas.
+
+3. AUDITORÍA DE CÓDIGO BASURA Y ARCHIVOS
+-----------------------------------------
+* Se eliminó el archivo 'reporte_auditoria_tecnica.txt' (obsoleto).
+* Se limpió el archivo 'strings.xml' de todas las variables 'mock'.
+* Se verificó que no existan clases o métodos sin uso tras la refactorización a Singleton.
+* La base de datos utiliza una única instancia (getInstance), eliminando fugas de memoria.
+
+CONCLUSIÓN DE CIERRE
+--------------------
+El sistema cumple con todos los requerimientos funcionales y técnicos. La arquitectura es limpia, modular (DAOs, Models, Utils) y preparada para su despliegue inicial.
+
+--- FIN DEL REPORTE ---

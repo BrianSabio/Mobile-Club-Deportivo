@@ -47,7 +47,7 @@ class ManageActivity : AppCompatActivity() {
 
         btnUpdate.setOnClickListener {
             cargarDatos()
-            Toast.makeText(this, "Listado actualizado", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.manage_toast_actualizado), Toast.LENGTH_SHORT).show()
         }
 
         etSearch.setOnEditorActionListener { _, actionId, _ ->
@@ -72,7 +72,7 @@ class ManageActivity : AppCompatActivity() {
 
         if (clientes.isEmpty()) {
             val tvEmpty = TextView(this)
-            tvEmpty.text = "No se encontraron clientes"
+            tvEmpty.text = getString(R.string.manage_error_vacio)
             tvEmpty.gravity = Gravity.CENTER
             tvEmpty.setPadding(0, 50, 0, 0)
             container.addView(tvEmpty)

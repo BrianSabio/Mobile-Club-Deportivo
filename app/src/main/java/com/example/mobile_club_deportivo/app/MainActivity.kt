@@ -42,13 +42,13 @@ class MainActivity : AppCompatActivity() {
             val password = etPassword.text.toString().trim()
 
             if (username.isEmpty()) {
-                etUsername.error = "El usuario es obligatorio"
+                etUsername.error = getString(R.string.login_error_usuario)
                 etUsername.requestFocus()
                 return@setOnClickListener
             }
 
             if (password.isEmpty()) {
-                etPassword.error = "La contraseña es obligatoria"
+                etPassword.error = getString(R.string.login_error_clave)
                 etPassword.requestFocus()
                 return@setOnClickListener
             }
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
                 session.iniciarSesion(username)
                 irAlMenu()
             } else {
-                Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.login_error_credenciales), Toast.LENGTH_SHORT).show()
             }
         }
     }
