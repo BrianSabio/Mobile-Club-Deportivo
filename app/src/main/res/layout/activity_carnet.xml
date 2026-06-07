@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <LinearLayout
+        android:id="@+id/layout_carnet_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:background="@drawable/bg_contenedor_borde"
+        android:elevation="4dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carnet_tv_titulo"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tv_carnet_nombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tv_carnet_dni"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carnet_tv_dni"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_carnet_tipo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carnet_tv_tipo"
+            android:layout_marginBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tv_carnet_nro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carnet_tv_nro_socio"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/tv_carnet_vencimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/carnet_tv_vencimiento"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_carnet_download"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/carnet_btn_descargar"
+        android:textStyle="bold" />
+
+</LinearLayout>
