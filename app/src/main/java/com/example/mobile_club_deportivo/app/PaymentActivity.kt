@@ -95,7 +95,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun actualizarVistaSocio(cliente: Cliente) {
-        findViewById<TextView>(R.id.tv_payment_member_name).text = "${cliente.nombre} ${cliente.apellido}"
+        findViewById<TextView>(R.id.tv_payment_member_name).text = getString(R.string.payment_tv_nombre_socio, "${cliente.nombre} ${cliente.apellido}")
         val layout = findViewById<LinearLayout>(R.id.layout_payment_member)
         (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
         (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_nro_socio, cliente.numeroSocio.toString())
@@ -119,7 +119,7 @@ class PaymentActivity : AppCompatActivity() {
     }
 
     private fun actualizarVistaNoSocio(cliente: Cliente) {
-        findViewById<TextView>(R.id.tv_payment_non_member_name).text = "${cliente.nombre} ${cliente.apellido}"
+        findViewById<TextView>(R.id.tv_payment_non_member_name).text = getString(R.string.payment_tv_nombre_no_socio, "${cliente.nombre} ${cliente.apellido}")
         val layout = findViewById<LinearLayout>(R.id.layout_payment_non_member)
         (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
         (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_telefono, cliente.telefono)

@@ -109,10 +109,17 @@ cd_ para Content Description (Descripciones de accesibilidad).
 
     <!-- PANTALLA CARNET -->
     <string name="carnet_tv_titulo">CARNET</string>
+    <string name="carnet_tv_nombre_club">CLUB DEPORTIVO MOBILE</string>
     <string name="carnet_tv_dni">DNI: %1$s</string>
     <string name="carnet_tv_tipo">Tipo: %1$s</string>
-    <string name="carnet_tv_nro_socio">Nro Socio: %1$s</string>
-    <string name="carnet_tv_vencimiento">Vence: %1$s</string>
+    <string name="carnet_tv_tel">Tel: %1$s</string>
+    <string name="carnet_tv_email">Email: %1$s</string>
+    <string name="carnet_tv_nro_socio">Socio N°: %1$s</string>
+    <string name="carnet_tv_emision">Emisión: %1$s</string>
+    <string name="carnet_tv_vencimiento">Vencimiento: %1$s</string>
     <string name="carnet_btn_descargar">Descargar PDF</string>
+    <string name="carnet_cd_logo">Logotipo oficial del club</string>
+    <string name="carnet_msg_vencido">VENCIDO</string>
+    <string name="carnet_msg_vigente">VIGENTE</string>
 
 </resources>

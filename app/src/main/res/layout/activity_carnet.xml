@@ -4,71 +4,161 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:gravity="center">
+    android:gravity="top|center_horizontal"
+    android:background="#F5F5F5">
 
     <LinearLayout
         android:id="@+id/layout_carnet_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="220dp"
         android:orientation="vertical"
-        android:padding="24dp"
+        android:padding="0dp"
         android:background="@drawable/bg_contenedor_borde"
-        android:elevation="4dp">
+        android:elevation="8dp"
+        android:layout_marginTop="24dp">
 
-        <TextView
+        <!-- Header del Carnet -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/carnet_tv_titulo"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp" />
+            android:background="#2E7D32"
+            android:padding="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tv_carnet_nombre"
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_club_logo"
+                android:contentDescription="@string/carnet_cd_logo" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="12dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/carnet_tv_nombre_club"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    android:textSize="16sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/carnet_tv_titulo"
+                    android:textColor="#E8F5E9"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Cuerpo del Carnet -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/tv_carnet_dni"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/carnet_tv_dni"
-            android:layout_marginBottom="4dp" />
+            <!-- Columna Datos -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_carnet_tipo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/carnet_tv_tipo"
-            android:layout_marginBottom="4dp" />
+                <TextView
+                    android:id="@+id/tv_carnet_nombre"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre Apellido"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#212121"
+                    android:layout_marginBottom="4dp" />
 
-        <TextView
-            android:id="@+id/tv_carnet_nro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/carnet_tv_nro_socio"
-            android:layout_marginBottom="16dp" />
+                <TextView
+                    android:id="@+id/tv_carnet_dni"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DNI: 00.000.000"
+                    android:textSize="13sp"
+                    android:textColor="#424242" />
 
-        <TextView
-            android:id="@+id/tv_carnet_vencimiento"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/carnet_tv_vencimiento"
-            android:textStyle="italic" />
+                <TextView
+                    android:id="@+id/tv_carnet_tipo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo: SOCIO"
+                    android:textSize="13sp"
+                    android:textColor="#424242" />
 
+                <TextView
+                    android:id="@+id/tv_carnet_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tel: 123456"
+                    android:textSize="13sp"
+                    android:textColor="#424242" />
+
+                <TextView
+                    android:id="@+id/tv_carnet_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email: info@club.com"
+                    android:textSize="12sp"
+                    android:textColor="#424242"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- Columna Status/Nro -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="end|bottom">
+
+                <TextView
+                    android:id="@+id/tv_carnet_nro"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Socio N°: #000"
+                    android:textStyle="bold"
+                    android:textSize="14sp"
+                    android:textColor="#2E7D32"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_carnet_emision"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Emisión: 00/00/0000"
+                    android:textSize="10sp"
+                    android:textColor="#757575" />
+
+                <TextView
+                    android:id="@+id/tv_carnet_vencimiento"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vence: 00/00/0000"
+                    android:textStyle="bold"
+                    android:textSize="11sp"
+                    android:textColor="#D32F2F" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_carnet_download"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#2E7D32"
         android:text="@string/carnet_btn_descargar"
-        android:textStyle="bold" />
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:elevation="4dp" />
 
 </LinearLayout>

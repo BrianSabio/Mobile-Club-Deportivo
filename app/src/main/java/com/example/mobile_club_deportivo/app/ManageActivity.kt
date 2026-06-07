@@ -113,7 +113,7 @@ class ManageActivity : AppCompatActivity() {
         layout.layoutParams = params
 
         val tvNombre = TextView(this)
-        tvNombre.text = "${cliente.nombre} ${cliente.apellido}"
+        tvNombre.text = getString(R.string.payment_tv_nombre_socio, "${cliente.nombre} ${cliente.apellido}")
         tvNombre.textSize = 20f
         tvNombre.setTypeface(null, Typeface.BOLD)
         tvNombre.setPadding(0, 0, 0, 16)

@@ -60,10 +60,37 @@ class CarnetActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_carnet_nombre).text = "${cliente.nombre} ${cliente.apellido}"
         findViewById<TextView>(R.id.tv_carnet_dni).text = getString(R.string.carnet_tv_dni, cliente.dni)
         findViewById<TextView>(R.id.tv_carnet_tipo).text = getString(R.string.carnet_tv_tipo, cliente.tipo.name)
-        findViewById<TextView>(R.id.tv_carnet_nro).text = if (cliente.numeroSocio != null) getString(R.string.carnet_tv_nro_socio, cliente.numeroSocio.toString()) else ""
+        findViewById<TextView>(R.id.tv_carnet_tel).text = getString(R.string.carnet_tv_tel, cliente.telefono)
+        findViewById<TextView>(R.id.tv_carnet_email).text = getString(R.string.carnet_tv_email, cliente.email)
         
+        // Número de socio solo si aplica
+        val tvNro = findViewById<TextView>(R.id.tv_carnet_nro)
+        if (cliente.numeroSocio != null) {
+            tvNro.text = getString(R.string.carnet_tv_nro_socio, cliente.numeroSocio.toString())
+            tvNro.visibility = View.VISIBLE
+        } else {
+            tvNro.visibility = View.GONE
+        }
+        
+        // Fecha de emisión (hoy)
+        val sdf = java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault())
+        val hoy = sdf.format(java.util.Date())
+        findViewById<TextView>(R.id.tv_carnet_emision).text = getString(R.string.carnet_tv_emision, hoy)
+        
+        // Vencimiento según último cobro
         val ultimoCobro = cobroDAO.obtenerUltimoCobro(cliente.idCliente)
-        findViewById<TextView>(R.id.tv_carnet_vencimiento).text = getString(R.string.carnet_tv_vencimiento, ultimoCobro?.fechaVencimiento ?: "N/A")
+        val vencimientoRaw = ultimoCobro?.fechaVencimiento ?: "N/A"
+        
+        // Formatear fecha de vencimiento para que sea legible (yyyy-mm-dd -> dd/mm/yyyy)
+        val vencimientoFormateado = try {
+            val parser = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+            val date = parser.parse(vencimientoRaw)
+            if (date != null) sdf.format(date) else vencimientoRaw
+        } catch (e: Exception) {
+            vencimientoRaw
+        }
+        
+        findViewById<TextView>(R.id.tv_carnet_vencimiento).text = getString(R.string.carnet_tv_vencimiento, vencimientoFormateado)
     }
 
     private fun generarPDF() {
