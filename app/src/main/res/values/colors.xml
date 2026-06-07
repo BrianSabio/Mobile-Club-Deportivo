@@ -6,12 +6,10 @@
     <color name="blue_light">#DCE6F2</color>
 
     <!-- Colores semánticos para estado de cuenta del cliente -->
-    <!-- Verde oscuro: legible y con buen contraste sobre fondo blanco (reemplaza Color.GREEN) -->
     <color name="estado_activo">#2E7D32</color>
-    <!-- Rojo oscuro: legible y con buen contraste sobre fondo blanco (reemplaza Color.RED) -->
     <color name="estado_inactivo">#C62828</color>
 
-    <!-- Colores del carnet (reemplazan hex hardcodeados en activity_carnet.xml) -->
+    <!-- Colores del carnet -->
     <color name="carnet_header_bg">#2E7D32</color>
     <color name="carnet_fondo">#F5F5F5</color>
     <color name="carnet_texto_primario">#212121</color>

@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.example.mobile_club_deportivo.app.utils.SecurityUtils
 
 /**
- * Clase encargada de la creación y gestión de la base de datos SQLite.
- * Implementa el patrón Singleton para asegurar una única instancia en toda la app.
+ * Gestiona la base de datos SQLite.
+ * Usa el patrón Singleton para tener una única instancia en toda la app.
  */
 class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
@@ -19,7 +19,7 @@ class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHe
         private var instance: ClubDeportivoDatabase? = null
 
         /**
-         * Obtiene la instancia única de la base de datos.
+         * Trae la instancia única de la base de datos.
          */
         fun getInstance(context: Context): ClubDeportivoDatabase {
             return instance ?: synchronized(this) {
@@ -27,7 +27,7 @@ class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHe
             }
         }
 
-        // Sentencias DDL para la creación de tablas
+        // Scripts de creación de las tablas
         private const val CREATE_TABLE_USUARIO = """
             CREATE TABLE USUARIO (
                 id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -97,23 +97,23 @@ class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHe
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        // Ejecutar creación de tablas
+        // Ejecuta la creación de todas las tablas
         db.execSQL(CREATE_TABLE_USUARIO)
         db.execSQL(CREATE_TABLE_CLIENTE)
         db.execSQL(CREATE_TABLE_ACTIVIDAD)
         db.execSQL(CREATE_TABLE_COBRO)
         db.execSQL(CREATE_TABLE_CARNET)
 
-        // Crear índices para mejorar el rendimiento de búsquedas frecuentes
+        // Crea índices para apurar las búsquedas pesadas
         db.execSQL("CREATE INDEX idx_cliente_dni ON CLIENTE(dni)")
         db.execSQL("CREATE INDEX idx_cobro_cliente ON COBRO(id_cliente)")
 
-        // Inserción del usuario administrador inicial (Seed)
+        // Setea el usuario administrador de entrada
         insertarAdminInicial(db)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        // Por ahora eliminamos y recreamos en caso de cambio de versión (desarrollo inicial)
+        // En desarrollo borramos y arrancamos de cero si cambia la versión
         db.execSQL("DROP TABLE IF EXISTS CARNET")
         db.execSQL("DROP TABLE IF EXISTS COBRO")
         db.execSQL("DROP TABLE IF EXISTS ACTIVIDAD")
@@ -124,9 +124,7 @@ class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHe
 
     override fun onOpen(db: SQLiteDatabase) {
         super.onOpen(db)
-        // Habilitar soporte para llaves foráneas en cada apertura de conexión.
-        // SQLite las desactiva por defecto en cada nueva conexión, por lo que
-        // este PRAGMA debe ejecutarse siempre, sin importar el modo de acceso.
+        // Habilita las llaves foráneas en cada conexión
         db.execSQL("PRAGMA foreign_keys = ON;")
     }
 
