@@ -4,6 +4,8 @@ import android.content.ContentValues
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
 import com.example.mobile_club_deportivo.app.models.Cobro
 import com.example.mobile_club_deportivo.app.models.EstadoCobro
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Operaciones de base de datos para la entidad Cobro.
@@ -43,17 +45,43 @@ class CobroDAO(private val dbHelper: ClubDeportivoDatabase) {
     private fun actualizarEstadoCliente(idCliente: Int) {
         val db = dbHelper.writableDatabase
         
-        val tieneDeuda = db.rawQuery(
-            "SELECT COUNT(*) FROM COBRO WHERE id_cliente = ? AND estado = 'VENCIDO'",
-            arrayOf(idCliente.toString())
-        ).use { cursor ->
-            if (cursor.moveToFirst()) cursor.getInt(0) > 0 else false
+        val query = """
+            SELECT 
+                (SELECT COUNT(*) FROM COBRO WHERE id_cliente = ? AND estado = 'VENCIDO') as vencidos,
+                (SELECT COUNT(*) FROM COBRO WHERE id_cliente = ?) as totales
+        """
+        
+        var tieneDeudaVencida = true
+        db.rawQuery(query, arrayOf(idCliente.toString(), idCliente.toString())).use { cursor ->
+            if (cursor.moveToFirst()) {
+                val vencidos = cursor.getInt(0)
+                val totales = cursor.getInt(1)
+                tieneDeudaVencida = vencidos > 0 || totales == 0
+            }
         }
 
         val values = ContentValues().apply {
-            put("estado", if (tieneDeuda) "INACTIVO" else "ACTIVO")
+            put("estado", if (tieneDeudaVencida) "INACTIVO" else "ACTIVO")
         }
         db.update("CLIENTE", values, "id_cliente = ?", arrayOf(idCliente.toString()))
+    }
+
+    /**
+     * Verifica si un cliente tiene deuda (no tiene cobros vigentes o tiene vencidos).
+     */
+    fun tieneDeuda(idCliente: Int): Boolean {
+        val db = dbHelper.readableDatabase
+        val hoy = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        
+        val query = "SELECT COUNT(*) FROM COBRO WHERE id_cliente = ? AND estado = 'PAGADO' AND fecha_vencimiento >= ?"
+        
+        var alDia = false
+        db.rawQuery(query, arrayOf(idCliente.toString(), hoy)).use { cursor ->
+            if (cursor.moveToFirst()) {
+                alDia = cursor.getInt(0) > 0
+            }
+        }
+        return !alDia
     }
 
     /**

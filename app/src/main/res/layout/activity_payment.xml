@@ -130,11 +130,17 @@
                     android:text="@string/payment_rb_efectivo"
                     android:checked="true" />
                 <RadioButton
-                    android:id="@+id/rb_card_member"
+                    android:id="@+id/rb_debit_member"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/payment_rb_tarjeta" />
+                    android:text="@string/payment_rb_debito" />
+                <RadioButton
+                    android:id="@+id/rb_credit_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_credito" />
             </RadioGroup>
 
             <Button
@@ -211,11 +217,17 @@
                     android:text="@string/payment_rb_efectivo"
                     android:checked="true" />
                 <RadioButton
-                    android:id="@+id/rb_card_non_member"
+                    android:id="@+id/rb_debit_non_member"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@string/payment_rb_tarjeta" />
+                    android:text="@string/payment_rb_debito" />
+                <RadioButton
+                    android:id="@+id/rb_credit_non_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_credito" />
             </RadioGroup>
 
             <Button

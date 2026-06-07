@@ -81,7 +81,10 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="payment_tv_actividad_gimnasio">Actividad: %1$s</string>
     <string name="payment_tv_metodo_pago">Seleccione método de pago:</string>
     <string name="payment_rb_efectivo">Efectivo</string>
-    <string name="payment_rb_tarjeta">Tarjeta</string>
+    <string name="payment_rb_debito">Débito</string>
+    <string name="payment_rb_credito">Crédito</string>
+    <string name="payment_tv_sin_deuda">Estado: Al día</string>
+    <string name="payment_tv_con_deuda">Estado: Deuda pendiente</string>
 
     <!-- PANTALLA CARNET -->
     <string name="carnet_tv_titulo">CARNET</string>

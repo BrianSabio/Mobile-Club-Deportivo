@@ -99,10 +99,23 @@ class PaymentActivity : AppCompatActivity() {
         val layout = findViewById<LinearLayout>(R.id.layout_payment_member)
         (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
         (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_nro_socio, cliente.numeroSocio.toString())
-        (layout.getChildAt(3) as TextView).text = getString(R.string.payment_tv_estado, cliente.estado.name)
         
-        // Uso de AppConfig para montos profesionales
-        (layout.getChildAt(4) as TextView).text = getString(R.string.payment_tv_deuda_pendiente, AppConfig.MONTO_CUOTA_SOCIO.toString())
+        // Lógica de deuda real
+        val tieneDeuda = cobroDAO.tieneDeuda(cliente.idCliente)
+        val tvEstado = layout.getChildAt(3) as TextView
+        val tvDeuda = layout.getChildAt(4) as TextView
+        
+        if (tieneDeuda) {
+            tvEstado.text = getString(R.string.payment_tv_con_deuda)
+            tvEstado.setTextColor(android.graphics.Color.RED)
+            tvDeuda.text = getString(R.string.payment_tv_deuda_pendiente, AppConfig.MONTO_CUOTA_SOCIO.toString())
+            findViewById<Button>(R.id.btn_payment_pay_fee).isEnabled = true
+        } else {
+            tvEstado.text = getString(R.string.payment_tv_sin_deuda)
+            tvEstado.setTextColor(android.graphics.Color.GREEN)
+            tvDeuda.text = "Sin deudas pendientes"
+            findViewById<Button>(R.id.btn_payment_pay_fee).isEnabled = false
+        }
     }
 
     private fun actualizarVistaNoSocio(cliente: Cliente) {
@@ -111,6 +124,7 @@ class PaymentActivity : AppCompatActivity() {
         (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
         (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_telefono, cliente.telefono)
         
+        // Un No Socio siempre paga por actividad cada vez
         (layout.getChildAt(3) as TextView).text = getString(R.string.payment_tv_actividad_gimnasio, "Gimnasio (Mensual)")
         (layout.getChildAt(4) as TextView).text = getString(R.string.payment_tv_monto_pagar, AppConfig.MONTO_ACTIVIDAD_NO_SOCIO.toString())
     }
@@ -118,18 +132,17 @@ class PaymentActivity : AppCompatActivity() {
     private fun realizarCobro() {
         val cliente = clienteActual ?: return
         
-        // Determinar método de pago seleccionado
+        // Determinar método de pago seleccionado con 3 opciones
         val rgMethod = if (cliente.tipo == TipoCliente.SOCIO) {
             findViewById<RadioGroup>(R.id.rg_payment_method_member)
         } else {
             findViewById<RadioGroup>(R.id.rg_payment_method_non_member)
         }
 
-        val medioPago = if (rgMethod.checkedRadioButtonId == R.id.rb_cash_member || 
-            rgMethod.checkedRadioButtonId == R.id.rb_cash_non_member) {
-            getString(R.string.payment_rb_efectivo)
-        } else {
-            getString(R.string.payment_rb_tarjeta)
+        val medioPago = when (rgMethod.checkedRadioButtonId) {
+            R.id.rb_cash_member, R.id.rb_cash_non_member -> getString(R.string.payment_rb_efectivo)
+            R.id.rb_debit_member, R.id.rb_debit_non_member -> getString(R.string.payment_rb_debito)
+            else -> getString(R.string.payment_rb_credito)
         }
 
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
