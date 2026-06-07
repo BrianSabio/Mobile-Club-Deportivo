@@ -16,6 +16,7 @@ import com.example.mobile_club_deportivo.app.dao.ClienteDAO
 import com.example.mobile_club_deportivo.app.dao.CobroDAO
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
 import com.example.mobile_club_deportivo.app.models.Cliente
+import com.example.mobile_club_deportivo.app.utils.SessionManager
 import java.io.OutputStream
 
 class CarnetActivity : AppCompatActivity() {
@@ -23,21 +24,21 @@ class CarnetActivity : AppCompatActivity() {
     private lateinit var dbHelper: ClubDeportivoDatabase
     private lateinit var clienteDAO: ClienteDAO
     private lateinit var cobroDAO: CobroDAO
+    private lateinit var session: SessionManager
     private var clienteActual: Cliente? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_carnet)
 
-        dbHelper = ClubDeportivoDatabase(this)
+        // Inicialización Singleton
+        dbHelper = ClubDeportivoDatabase.getInstance(this)
         clienteDAO = ClienteDAO(dbHelper)
         cobroDAO = CobroDAO(dbHelper)
+        session = SessionManager(this)
 
-        // Obtener ID del cliente desde el Intent
-        val idCliente = intent.getIntOfExtra("ID_CLIENTE", -1)
+        val idCliente = intent.getIntExtra("ID_CLIENTE", -1)
         if (idCliente != -1) {
-            // Necesitaríamos un método obtenerPorId en el DAO, 
-            // pero para esta entrega buscaremos por lista filtrada
             clienteActual = clienteDAO.obtenerClientes().find { it.idCliente == idCliente }
         }
 
@@ -57,12 +58,12 @@ class CarnetActivity : AppCompatActivity() {
     private fun mostrarDatos() {
         val cliente = clienteActual!!
         findViewById<TextView>(R.id.tv_carnet_nombre).text = "${cliente.nombre} ${cliente.apellido}"
-        findViewById<TextView>(R.id.tv_carnet_dni).text = "${getString(R.string.carnet_tv_dni)} ${cliente.dni}"
-        findViewById<TextView>(R.id.tv_carnet_tipo).text = "${getString(R.string.carnet_tv_tipo)} ${cliente.tipo}"
-        findViewById<TextView>(R.id.tv_carnet_nro).text = if (cliente.numeroSocio != null) "${getString(R.string.carnet_tv_nro_socio)} #${cliente.numeroSocio}" else ""
+        findViewById<TextView>(R.id.tv_carnet_dni).text = getString(R.string.carnet_tv_dni, cliente.dni)
+        findViewById<TextView>(R.id.tv_carnet_tipo).text = getString(R.string.carnet_tv_tipo, cliente.tipo.name)
+        findViewById<TextView>(R.id.tv_carnet_nro).text = if (cliente.numeroSocio != null) getString(R.string.carnet_tv_nro_socio, cliente.numeroSocio.toString()) else ""
         
         val ultimoCobro = cobroDAO.obtenerUltimoCobro(cliente.idCliente)
-        findViewById<TextView>(R.id.tv_carnet_vencimiento).text = "${getString(R.string.carnet_tv_vencimiento)} ${ultimoCobro?.fechaVencimiento ?: "N/A"}"
+        findViewById<TextView>(R.id.tv_carnet_vencimiento).text = getString(R.string.carnet_tv_vencimiento, ultimoCobro?.fechaVencimiento ?: "N/A")
     }
 
     private fun generarPDF() {
@@ -102,10 +103,5 @@ class CarnetActivity : AppCompatActivity() {
             e.printStackTrace()
             Toast.makeText(this, "Error al generar PDF: ${e.message}", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    // Extensión simple para evitar errores de tipo si no existe getIntExtra directo
-    private fun android.content.Intent.getIntOfExtra(name: String, defaultValue: Int): Int {
-        return this.getIntExtra(name, defaultValue)
     }
 }

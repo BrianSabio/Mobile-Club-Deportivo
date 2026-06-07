@@ -3,16 +3,29 @@ package com.example.mobile_club_deportivo.app.database
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import java.security.MessageDigest
+import com.example.mobile_club_deportivo.app.utils.SecurityUtils
 
 /**
  * Clase encargada de la creación y gestión de la base de datos SQLite.
+ * Implementa el patrón Singleton para asegurar una única instancia en toda la app.
  */
-class ClubDeportivoDatabase(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
         private const val DATABASE_NAME = "ClubDeportivo.db"
         private const val DATABASE_VERSION = 1
+        
+        @Volatile
+        private var instance: ClubDeportivoDatabase? = null
+
+        /**
+         * Obtiene la instancia única de la base de datos.
+         */
+        fun getInstance(context: Context): ClubDeportivoDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: ClubDeportivoDatabase(context.applicationContext).also { instance = it }
+            }
+        }
 
         // Sentencias DDL para la creación de tablas
         private const val CREATE_TABLE_USUARIO = """
@@ -120,17 +133,9 @@ class ClubDeportivoDatabase(context: Context) : SQLiteOpenHelper(context, DATABA
     private fun insertarAdminInicial(db: SQLiteDatabase) {
         val adminUser = "admin"
         val adminPass = "admin"
-        val passwordHash = sha256(adminPass)
+        val passwordHash = SecurityUtils.sha256(adminPass)
 
         val sql = "INSERT INTO USUARIO (nombre_usuario, contrasena_hash) VALUES (?, ?)"
         db.execSQL(sql, arrayOf(adminUser, passwordHash))
-    }
-
-    /**
-     * Función utilitaria para generar hash SHA-256 de un String.
-     */
-    private fun sha256(input: String): String {
-        val bytes = MessageDigest.getInstance("SHA-256").digest(input.toByteArray())
-        return bytes.joinToString("") { "%02x".format(it) }
     }
 }

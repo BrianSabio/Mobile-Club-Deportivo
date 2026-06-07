@@ -106,7 +106,36 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_metodo_pago"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <RadioGroup
+                android:id="@+id/rg_payment_method_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <RadioButton
+                    android:id="@+id/rb_cash_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_efectivo"
+                    android:checked="true" />
+                <RadioButton
+                    android:id="@+id/rb_card_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_tarjeta" />
+            </RadioGroup>
 
             <Button
                 android:id="@+id/btn_payment_pay_fee"
@@ -158,7 +187,36 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/payment_tv_metodo_pago"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp" />
+
+            <RadioGroup
+                android:id="@+id/rg_payment_method_non_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+                <RadioButton
+                    android:id="@+id/rb_cash_non_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_efectivo"
+                    android:checked="true" />
+                <RadioButton
+                    android:id="@+id/rb_card_non_member"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/payment_rb_tarjeta" />
+            </RadioGroup>
 
             <Button
                 android:id="@+id/btn_payment_pay_activity"

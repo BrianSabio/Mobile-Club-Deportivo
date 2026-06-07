@@ -8,12 +8,14 @@ import com.example.mobile_club_deportivo.app.dao.ClienteDAO
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
 import com.example.mobile_club_deportivo.app.models.Cliente
 import com.example.mobile_club_deportivo.app.models.TipoCliente
+import com.example.mobile_club_deportivo.app.utils.SessionManager
 import java.util.*
 
 class RegisterClientActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: ClubDeportivoDatabase
     private lateinit var clienteDAO: ClienteDAO
+    private lateinit var session: SessionManager
     private var fechaSeleccionada: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,8 +23,13 @@ class RegisterClientActivity : AppCompatActivity() {
         setContentView(R.layout.activity_register_client)
 
         // Inicialización
-        dbHelper = ClubDeportivoDatabase(this)
+        dbHelper = ClubDeportivoDatabase.getInstance(this)
         clienteDAO = ClienteDAO(dbHelper)
+        session = SessionManager(this)
+
+        // Cargar nombre real en el header
+        val tvUser = findViewById<TextView>(R.id.tv_register_username)
+        tvUser.text = getString(R.string.global_nombre_usuario, session.getNombreUsuario())
 
         val btnBack = findViewById<ImageButton>(R.id.btn_register_back)
         val btnSubmit = findViewById<Button>(R.id.btn_register_submit)
@@ -36,7 +43,9 @@ class RegisterClientActivity : AppCompatActivity() {
         val rgTipo = findViewById<RadioGroup>(R.id.rg_register_socio)
         val cbApto = findViewById<CheckBox>(R.id.cb_register_apto_fisico)
 
-        // Configuración de DatePicker para fecha de nacimiento
+        // Mejora UX: Deshabilitar teclado para fecha y forzar selector
+        etFechaNac.isFocusable = false
+        etFechaNac.isClickable = true
         etFechaNac.setOnClickListener {
             val calendar = Calendar.getInstance()
             val year = calendar.get(Calendar.YEAR)
@@ -44,9 +53,8 @@ class RegisterClientActivity : AppCompatActivity() {
             val day = calendar.get(Calendar.DAY_OF_MONTH)
 
             val dpd = DatePickerDialog(this, { _, y, m, d ->
-                // Formato ISO-8601: YYYY-MM-DD
-                val mes = String.format("%02d", m + 1)
-                val dia = String.format("%02d", d)
+                val mes = String.format(Locale.US, "%02d", m + 1)
+                val dia = String.format(Locale.US, "%02d", d)
                 fechaSeleccionada = "$y-$mes-$dia"
                 etFechaNac.setText(fechaSeleccionada)
             }, year, month, day)
@@ -64,7 +72,6 @@ class RegisterClientActivity : AppCompatActivity() {
             val email = etEmail.text.toString().trim()
             val aptoFisico = cbApto.isChecked
 
-            // Validaciones
             if (nombreCompleto.isEmpty()) {
                 etNombre.error = "Ingrese el nombre completo"
                 etNombre.requestFocus()
@@ -89,26 +96,22 @@ class RegisterClientActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Separar nombre y apellido (suponiendo primer espacio como separador simple)
             val partes = nombreCompleto.split(" ", limit = 2)
             val nombre = partes[0]
             val apellido = if (partes.size > 1) partes[1] else ""
 
-            // Verificar si el DNI ya existe
             if (clienteDAO.existeDni(dni)) {
                 etDni.error = "Este DNI ya se encuentra registrado"
                 etDni.requestFocus()
                 return@setOnClickListener
             }
 
-            // Determinar tipo de cliente
             val tipo = if (rgTipo.checkedRadioButtonId == R.id.rb_register_socio) {
                 TipoCliente.SOCIO
             } else {
                 TipoCliente.NO_SOCIO
             }
 
-            // Crear objeto cliente
             val nuevoCliente = Cliente(
                 nombre = nombre,
                 apellido = apellido,
@@ -120,22 +123,13 @@ class RegisterClientActivity : AppCompatActivity() {
                 tipo = tipo
             )
 
-            // Guardar en DB
             val resultadoId = clienteDAO.registrarCliente(nuevoCliente)
 
             if (resultadoId != -1L) {
-                Toast.makeText(
-                    this,
-                    "Cliente registrado con éxito (ID: $resultadoId)",
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast.makeText(this, "Cliente registrado con éxito (ID: $resultadoId)", Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(
-                    this,
-                    "Error al guardar en la base de datos",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, "Error al guardar en la base de datos", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -12,7 +12,7 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="global_registrar">Registrar Cliente</string>
     <string name="global_cobro">Generar Cobro</string>
     <string name="global_gestionar">Gestionar</string>
-    <string name="global_nombre_usuario">Nombre de Usuario</string>
+    <string name="global_nombre_usuario">Administrador: %1$s</string>
     <string name="global_socio">Socio</string>
     <string name="global_no_socio">No Socio</string>
     <!-- Content Description -->
@@ -52,16 +52,16 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="manage_tv_socios_deuda">Socios con deuda hoy</string>
     <string name="manage_tv_fecha_actual">Fecha actual</string>
     <string name="manage_et_hint_buscar_cliente">Buscar cliente por nombre…</string>
-    <string name="manage_tv_dni">DNI</string>
-    <string name="manage_tv_tel">Tel</string>
-    <string name="manage_tv_fecha_nacimiento">Fec. nac</string>
-    <string name="manage_tv_numero_socio">N° socio</string>
-    <string name="manage_tv_estado">Estado</string>
-    <string name="manage_tv_deuda">Deuda</string>
+    <string name="manage_tv_dni">DNI: %1$s</string>
+    <string name="manage_tv_tel">Tel: %1$s</string>
+    <string name="manage_tv_fecha_nacimiento">Fec. nac: %1$s</string>
+    <string name="manage_tv_numero_socio">N° socio: %1$s</string>
+    <string name="manage_tv_estado">Estado: %1$s</string>
+    <string name="manage_tv_deuda">Deuda: %1$s</string>
     <string name="manage_btn_cobrar">Cobrar</string>
     <string name="manage_btn_carnet">Carnet</string>
-    <string name="manage_tv_cantidad_deudores">Cantidad de deudores:</string>
-    <string name="manage_tv_fecha_hoy">Fecha:</string>
+    <string name="manage_tv_cantidad_deudores">Cantidad de deudores: %1$d</string>
+    <string name="manage_tv_fecha_hoy">Fecha: %1$s</string>
 
     <!-- PANTALLA GENERAR COBRO -->
     <string name="payment_tv_titulo">Generar Cobro</string>
@@ -69,23 +69,26 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="payment_btn_cobrar">Cobrar</string>
 
     <!-- ETIQUETAS DE RESULTADOS -->
-    <string name="payment_tv_nombre_socio">Socio:</string>
-    <string name="payment_tv_nombre_no_socio">No Socio:</string>
-    <string name="payment_tv_dni">DNI:</string>
-    <string name="payment_tv_telefono">Tel:</string>
-    <string name="payment_tv_fecha_ingreso">Ingreso:</string>
-    <string name="payment_tv_nro_socio">Nro Socio:</string>
-    <string name="payment_tv_estado">Estado:</string>
-    <string name="payment_tv_deuda_pendiente">Deuda:</string>
-    <string name="payment_tv_monto_pagar">Monto a Pagar:</string>
-    <string name="payment_tv_actividad_gimnasio">Actividad:</string>
+    <string name="payment_tv_nombre_socio">Socio: %1$s</string>
+    <string name="payment_tv_nombre_no_socio">No Socio: %1$s</string>
+    <string name="payment_tv_dni">DNI: %1$s</string>
+    <string name="payment_tv_telefono">Tel: %1$s</string>
+    <string name="payment_tv_fecha_ingreso">Ingreso: %1$s</string>
+    <string name="payment_tv_nro_socio">Nro Socio: %1$s</string>
+    <string name="payment_tv_estado">Estado: %1$s</string>
+    <string name="payment_tv_deuda_pendiente">Deuda: %1$s</string>
+    <string name="payment_tv_monto_pagar">Monto a Pagar: %1$s</string>
+    <string name="payment_tv_actividad_gimnasio">Actividad: %1$s</string>
+    <string name="payment_tv_metodo_pago">Seleccione método de pago:</string>
+    <string name="payment_rb_efectivo">Efectivo</string>
+    <string name="payment_rb_tarjeta">Tarjeta</string>
 
     <!-- PANTALLA CARNET -->
     <string name="carnet_tv_titulo">CARNET</string>
-    <string name="carnet_tv_dni">DNI:</string>
-    <string name="carnet_tv_tipo">Tipo:</string>
-    <string name="carnet_tv_nro_socio">Nro Socio:</string>
-    <string name="carnet_tv_vencimiento">Vence:</string>
+    <string name="carnet_tv_dni">DNI: %1$s</string>
+    <string name="carnet_tv_tipo">Tipo: %1$s</string>
+    <string name="carnet_tv_nro_socio">Nro Socio: %1$s</string>
+    <string name="carnet_tv_vencimiento">Vence: %1$s</string>
     <string name="carnet_btn_descargar">Descargar PDF</string>
 
 </resources>

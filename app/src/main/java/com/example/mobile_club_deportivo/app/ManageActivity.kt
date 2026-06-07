@@ -5,12 +5,14 @@ import android.graphics.Typeface
 import android.os.Bundle
 import android.view.Gravity
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mobile_club_deportivo.app.dao.ClienteDAO
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
 import com.example.mobile_club_deportivo.app.models.Cliente
 import com.example.mobile_club_deportivo.app.models.EstadoCliente
+import com.example.mobile_club_deportivo.app.utils.SessionManager
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,15 +21,21 @@ class ManageActivity : AppCompatActivity() {
     private lateinit var dbHelper: ClubDeportivoDatabase
     private lateinit var clienteDAO: ClienteDAO
     private lateinit var container: LinearLayout
+    private lateinit var session: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_manage)
 
         // Inicialización
-        dbHelper = ClubDeportivoDatabase(this)
+        dbHelper = ClubDeportivoDatabase.getInstance(this)
         clienteDAO = ClienteDAO(dbHelper)
         container = findViewById(R.id.container_manage_list)
+        session = SessionManager(this)
+
+        // Cargar nombre real en el header
+        val tvUser = findViewById<TextView>(R.id.tv_manage_username)
+        tvUser.text = getString(R.string.global_nombre_usuario, session.getNombreUsuario())
 
         val btnBack = findViewById<ImageButton>(R.id.btn_manage_back)
         val btnUpdate = findViewById<Button>(R.id.btn_manage_update)
@@ -46,6 +54,7 @@ class ManageActivity : AppCompatActivity() {
             if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
                 val busqueda = etSearch.text.toString().trim()
                 cargarDatos(busqueda)
+                ocultarTeclado() // Mejora UX: Ocultar teclado tras búsqueda
                 true
             } else {
                 false
@@ -59,7 +68,6 @@ class ManageActivity : AppCompatActivity() {
         container.removeAllViews()
         val clientes = clienteDAO.obtenerClientes(busqueda)
         
-        // Actualizar resumen (deudores y fecha)
         actualizarResumen()
 
         if (clientes.isEmpty()) {
@@ -82,13 +90,12 @@ class ManageActivity : AppCompatActivity() {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val fechaHoy = sdf.format(Date())
 
-        // Buscamos los TextViews de resumen en el primer LinearLayout interno
         val headerLayout = (findViewById<LinearLayout>(R.id.layout_manage)).getChildAt(1) as? LinearLayout
         headerLayout?.let {
             val tvCant = it.getChildAt(2) as? TextView
             val tvFec = it.getChildAt(3) as? TextView
-            tvCant?.text = "${getString(R.string.manage_tv_cantidad_deudores)} $cantDeudores"
-            tvFec?.text = "${getString(R.string.manage_tv_fecha_hoy)} $fechaHoy"
+            tvCant?.text = getString(R.string.manage_tv_cantidad_deudores, cantDeudores)
+            tvFec?.text = getString(R.string.manage_tv_fecha_hoy, fechaHoy)
         }
     }
 
@@ -105,7 +112,6 @@ class ManageActivity : AppCompatActivity() {
         params.setMargins(0, 0, 0, 24)
         layout.layoutParams = params
 
-        // Nombre y Apellido
         val tvNombre = TextView(this)
         tvNombre.text = "${cliente.nombre} ${cliente.apellido}"
         tvNombre.textSize = 20f
@@ -113,30 +119,28 @@ class ManageActivity : AppCompatActivity() {
         tvNombre.setPadding(0, 0, 0, 16)
         layout.addView(tvNombre)
 
-        // Datos
-        layout.addView(crearDatoText("DNI: ${cliente.dni}"))
-        layout.addView(crearDatoText("Tel: ${cliente.telefono}"))
-        layout.addView(crearDatoText("Email: ${cliente.email}"))
+        // Uso de strings con placeholders
+        layout.addView(crearDatoText(getString(R.string.manage_tv_dni, cliente.dni)))
+        layout.addView(crearDatoText(getString(R.string.manage_tv_tel, cliente.telefono)))
         
         if (cliente.numeroSocio != null) {
-            layout.addView(crearDatoText("Nro Socio: ${cliente.numeroSocio}"))
+            layout.addView(crearDatoText(getString(R.string.manage_tv_numero_socio, cliente.numeroSocio.toString())))
         }
         
-        val tvEstado = crearDatoText("Estado: ${cliente.estado}")
+        val tvEstado = crearDatoText(getString(R.string.manage_tv_estado, cliente.estado.name))
         if (cliente.estado == EstadoCliente.INACTIVO) {
             tvEstado.setTextColor(Color.RED)
             tvEstado.setTypeface(null, Typeface.BOLD)
         }
         layout.addView(tvEstado)
 
-        // Botones de acción
         val buttonLayout = LinearLayout(this)
         buttonLayout.orientation = LinearLayout.HORIZONTAL
         buttonLayout.gravity = Gravity.END
         buttonLayout.setPadding(0, 16, 0, 0)
 
         val btnCarnet = Button(this)
-        btnCarnet.text = "Carnet"
+        btnCarnet.text = getString(R.string.manage_btn_carnet)
         btnCarnet.setOnClickListener {
             val intent = android.content.Intent(this, CarnetActivity::class.java)
             intent.putExtra("ID_CLIENTE", cliente.idCliente)
@@ -145,7 +149,6 @@ class ManageActivity : AppCompatActivity() {
         buttonLayout.addView(btnCarnet)
 
         layout.addView(buttonLayout)
-
         return layout
     }
 
@@ -155,5 +158,13 @@ class ManageActivity : AppCompatActivity() {
         tv.textSize = 14f
         tv.setPadding(0, 0, 0, 4)
         return tv
+    }
+
+    private fun ocultarTeclado() {
+        val view = this.currentFocus
+        if (view != null) {
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 }
