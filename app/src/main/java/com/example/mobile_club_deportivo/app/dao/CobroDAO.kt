@@ -40,23 +40,24 @@ class CobroDAO(private val dbHelper: ClubDeportivoDatabase) {
     }
 
     /**
-     * Actualiza el estado del cliente basándose en sus deudas.
+     * Actualiza el estado ACTIVO/INACTIVO del cliente según sus cobros VENCIDOS.
+     * Accesible desde otros componentes del paquete (ej: ManageActivity)
+     * para recalcular estados tras ejecutar el proceso batch de vencimientos.
      */
-    private fun actualizarEstadoCliente(idCliente: Int) {
+    fun actualizarEstadoCliente(idCliente: Int) {
         val db = dbHelper.writableDatabase
         
         val query = """
-            SELECT 
-                (SELECT COUNT(*) FROM COBRO WHERE id_cliente = ? AND estado = 'VENCIDO') as vencidos,
-                (SELECT COUNT(*) FROM COBRO WHERE id_cliente = ?) as totales
+            SELECT COUNT(*) FROM COBRO WHERE id_cliente = ? AND estado = 'VENCIDO'
         """
         
-        var tieneDeudaVencida = true
-        db.rawQuery(query, arrayOf(idCliente.toString(), idCliente.toString())).use { cursor ->
+        var tieneDeudaVencida = false
+        db.rawQuery(query, arrayOf(idCliente.toString())).use { cursor ->
             if (cursor.moveToFirst()) {
                 val vencidos = cursor.getInt(0)
-                val totales = cursor.getInt(1)
-                tieneDeudaVencida = vencidos > 0 || totales == 0
+                // Un cliente sin cobros (totales == 0) NO tiene deuda: es nuevo y está activo.
+                // Solo se marca INACTIVO si tiene al menos un cobro con estado VENCIDO.
+                tieneDeudaVencida = vencidos > 0
             }
         }
 
@@ -119,5 +120,26 @@ class CobroDAO(private val dbHelper: ClubDeportivoDatabase) {
                 null
             }
         }
+    }
+
+    /**
+     * Marca como VENCIDO todo cobro cuya fecha_vencimiento sea anterior a hoy
+     * y cuyo estado actual todavía sea PAGADO.
+     * Debe llamarse manualmente desde ManageActivity al presionar "Actualizar listado".
+     * @return la cantidad de cobros actualizados a VENCIDO en esta ejecución.
+     */
+    fun marcarCobrosVencidos(): Int {
+        val db = dbHelper.writableDatabase
+        val hoy = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val values = ContentValues().apply {
+            put("estado", EstadoCobro.VENCIDO.name)
+        }
+        // Actualizar solo los cobros que: 1) estaban PAGADO y 2) ya vencieron por fecha
+        return db.update(
+            "COBRO",
+            values,
+            "estado = ? AND fecha_vencimiento < ?",
+            arrayOf(EstadoCobro.PAGADO.name, hoy)
+        )
     }
 }

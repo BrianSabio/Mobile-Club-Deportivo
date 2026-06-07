@@ -6,6 +6,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.mobile_club_deportivo.app.dao.ClienteDAO
 import com.example.mobile_club_deportivo.app.dao.CobroDAO
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
@@ -96,23 +97,25 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun actualizarVistaSocio(cliente: Cliente) {
         findViewById<TextView>(R.id.tv_payment_member_name).text = getString(R.string.payment_tv_nombre_socio, "${cliente.nombre} ${cliente.apellido}")
-        val layout = findViewById<LinearLayout>(R.id.layout_payment_member)
-        (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
-        (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_nro_socio, cliente.numeroSocio.toString())
-        
+        // Acceso por ID explícito: seguro ante cambios de orden en el XML
+        findViewById<TextView>(R.id.tv_payment_member_dni).text   = getString(R.string.payment_tv_dni, cliente.dni)
+        findViewById<TextView>(R.id.tv_payment_member_nro).text   = getString(R.string.payment_tv_nro_socio, cliente.numeroSocio.toString())
+
         // Lógica de deuda real
-        val tieneDeuda = cobroDAO.tieneDeuda(cliente.idCliente)
-        val tvEstado = layout.getChildAt(3) as TextView
-        val tvDeuda = layout.getChildAt(4) as TextView
+        val tieneDeuda  = cobroDAO.tieneDeuda(cliente.idCliente)
+        val tvEstado    = findViewById<TextView>(R.id.tv_payment_member_estado)
+        val tvDeuda     = findViewById<TextView>(R.id.tv_payment_member_deuda)
         
         if (tieneDeuda) {
             tvEstado.text = getString(R.string.payment_tv_con_deuda)
-            tvEstado.setTextColor(android.graphics.Color.RED)
+            // Fix #12b: usar color semántico con buen contraste en lugar de Color.RED puro
+            tvEstado.setTextColor(ContextCompat.getColor(this, R.color.estado_inactivo))
             tvDeuda.text = getString(R.string.payment_tv_deuda_pendiente, AppConfig.MONTO_CUOTA_SOCIO.toString())
             findViewById<Button>(R.id.btn_payment_pay_fee).isEnabled = true
         } else {
             tvEstado.text = getString(R.string.payment_tv_sin_deuda)
-            tvEstado.setTextColor(android.graphics.Color.GREEN)
+            // Fix #12b: usar color semántico con buen contraste en lugar de Color.GREEN puro
+            tvEstado.setTextColor(ContextCompat.getColor(this, R.color.estado_activo))
             tvDeuda.text = getString(R.string.payment_tv_sin_deuda_desc)
             findViewById<Button>(R.id.btn_payment_pay_fee).isEnabled = false
         }
@@ -120,13 +123,13 @@ class PaymentActivity : AppCompatActivity() {
 
     private fun actualizarVistaNoSocio(cliente: Cliente) {
         findViewById<TextView>(R.id.tv_payment_non_member_name).text = getString(R.string.payment_tv_nombre_no_socio, "${cliente.nombre} ${cliente.apellido}")
-        val layout = findViewById<LinearLayout>(R.id.layout_payment_non_member)
-        (layout.getChildAt(1) as TextView).text = getString(R.string.payment_tv_dni, cliente.dni)
-        (layout.getChildAt(2) as TextView).text = getString(R.string.payment_tv_telefono, cliente.telefono)
-        
+        // Acceso por ID explícito: seguro ante cambios de orden en el XML
+        findViewById<TextView>(R.id.tv_payment_non_member_dni).text      = getString(R.string.payment_tv_dni, cliente.dni)
+        findViewById<TextView>(R.id.tv_payment_non_member_tel).text      = getString(R.string.payment_tv_telefono, cliente.telefono)
         // Un No Socio siempre paga por actividad cada vez
-        (layout.getChildAt(3) as TextView).text = getString(R.string.payment_tv_actividad_gimnasio, "Gimnasio (Mensual)")
-        (layout.getChildAt(4) as TextView).text = getString(R.string.payment_tv_monto_pagar, AppConfig.MONTO_ACTIVIDAD_NO_SOCIO.toString())
+        // Se usa AppConfig.DESC_ACTIVIDAD_GYM como fuente única de verdad
+        findViewById<TextView>(R.id.tv_payment_non_member_actividad).text = getString(R.string.payment_tv_actividad_gimnasio, AppConfig.DESC_ACTIVIDAD_GYM)
+        findViewById<TextView>(R.id.tv_payment_non_member_monto).text    = getString(R.string.payment_tv_monto_pagar, AppConfig.MONTO_ACTIVIDAD_NO_SOCIO.toString())
     }
 
     private fun realizarCobro() {

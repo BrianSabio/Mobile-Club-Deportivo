@@ -124,10 +124,10 @@ class ClubDeportivoDatabase private constructor(context: Context) : SQLiteOpenHe
 
     override fun onOpen(db: SQLiteDatabase) {
         super.onOpen(db)
-        // Habilitar soporte para llaves foráneas en SQLite
-        if (!db.isReadOnly) {
-            db.execSQL("PRAGMA foreign_keys = ON;")
-        }
+        // Habilitar soporte para llaves foráneas en cada apertura de conexión.
+        // SQLite las desactiva por defecto en cada nueva conexión, por lo que
+        // este PRAGMA debe ejecutarse siempre, sin importar el modo de acceso.
+        db.execSQL("PRAGMA foreign_keys = ON;")
     }
 
     private fun insertarAdminInicial(db: SQLiteDatabase) {

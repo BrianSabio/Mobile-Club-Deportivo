@@ -121,5 +121,13 @@ cd_ para Content Description (Descripciones de accesibilidad).
     <string name="carnet_cd_logo">Logotipo oficial del club</string>
     <string name="carnet_msg_vencido">VENCIDO</string>
     <string name="carnet_msg_vigente">VIGENTE</string>
+    <!-- Mensajes de estado del carnet -->
+    <string name="carnet_btn_emitir">Emitir Carnet</string>
+    <string name="carnet_error_cliente">Error al cargar los datos del cliente</string>
+    <string name="carnet_success_pdf">PDF guardado en la carpeta Descargas</string>
+    <string name="carnet_error_pdf">Error al generar el PDF: %1$s</string>
+    <string name="carnet_error_permiso">Se necesita permiso de almacenamiento para guardar el PDF</string>
+    <string name="carnet_success_emision">Carnet emitido y guardado correctamente</string>
+    <string name="carnet_error_emision">Error al emitir el carnet</string>
 
 </resources>

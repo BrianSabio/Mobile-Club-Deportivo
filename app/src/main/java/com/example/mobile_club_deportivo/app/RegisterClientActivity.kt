@@ -18,39 +18,50 @@ class RegisterClientActivity : AppCompatActivity() {
     private lateinit var session: SessionManager
     private var fechaSeleccionada: String? = null
 
+    // Clave para preservar la fecha seleccionada al rotar la pantalla
+    companion object {
+        private const val KEY_FECHA_NAC = "fecha_nacimiento_seleccionada"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_client)
 
         // Inicialización
-        dbHelper = ClubDeportivoDatabase.getInstance(this)
+        dbHelper   = ClubDeportivoDatabase.getInstance(this)
         clienteDAO = ClienteDAO(dbHelper)
-        session = SessionManager(this)
+        session    = SessionManager(this)
 
         // Cargar nombre real en el header
         val tvUser = findViewById<TextView>(R.id.tv_register_username)
         tvUser.text = getString(R.string.global_nombre_usuario, session.getNombreUsuario())
 
-        val btnBack = findViewById<ImageButton>(R.id.btn_register_back)
+        val btnBack   = findViewById<ImageButton>(R.id.btn_register_back)
         val btnSubmit = findViewById<Button>(R.id.btn_register_submit)
-        
-        val etNombre = findViewById<EditText>(R.id.et_register_nombre_apellido)
-        val etDni = findViewById<EditText>(R.id.et_register_dni)
+
+        val etNombre   = findViewById<EditText>(R.id.et_register_nombre_apellido)
+        val etDni      = findViewById<EditText>(R.id.et_register_dni)
         val etTelefono = findViewById<EditText>(R.id.et_register_telefono)
-        val etEmail = findViewById<EditText>(R.id.et_register_email)
+        val etEmail    = findViewById<EditText>(R.id.et_register_email)
         val etFechaNac = findViewById<EditText>(R.id.et_register_fecha_nacimiento)
-        
+
         val rgTipo = findViewById<RadioGroup>(R.id.rg_register_socio)
         val cbApto = findViewById<CheckBox>(R.id.cb_register_apto_fisico)
 
-        // Mejora UX: Deshabilitar teclado para fecha y forzar selector
+        // Fix #14: Restaurar la fecha seleccionada si la pantalla fue rotada
+        savedInstanceState?.getString(KEY_FECHA_NAC)?.let { fechaGuardada ->
+            fechaSeleccionada = fechaGuardada
+            etFechaNac.setText(fechaGuardada)
+        }
+
+        // Mejora UX: Deshabilitar teclado para fecha y forzar selector de calendario
         etFechaNac.isFocusable = false
         etFechaNac.isClickable = true
         etFechaNac.setOnClickListener {
             val calendar = Calendar.getInstance()
-            val year = calendar.get(Calendar.YEAR)
+            val year  = calendar.get(Calendar.YEAR)
             val month = calendar.get(Calendar.MONTH)
-            val day = calendar.get(Calendar.DAY_OF_MONTH)
+            val day   = calendar.get(Calendar.DAY_OF_MONTH)
 
             val dpd = DatePickerDialog(this, { _, y, m, d ->
                 val mes = String.format(Locale.US, "%02d", m + 1)
@@ -67,10 +78,10 @@ class RegisterClientActivity : AppCompatActivity() {
 
         btnSubmit.setOnClickListener {
             val nombreCompleto = etNombre.text.toString().trim()
-            val dni = etDni.text.toString().trim()
-            val telefono = etTelefono.text.toString().trim()
-            val email = etEmail.text.toString().trim()
-            val aptoFisico = cbApto.isChecked
+            val dni            = etDni.text.toString().trim()
+            val telefono       = etTelefono.text.toString().trim()
+            val email          = etEmail.text.toString().trim()
+            val aptoFisico     = cbApto.isChecked
 
             // 1. Validación de Nombre y Apellido (Al menos dos palabras)
             if (nombreCompleto.isEmpty() || !nombreCompleto.contains(" ")) {
@@ -79,8 +90,9 @@ class RegisterClientActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 2. Validación de DNI (Numérico y longitud razonable)
-            if (dni.isEmpty() || dni.length < 7 || dni.length > 9) {
+            // 2. Validación de DNI: longitud correcta Y contenido numérico
+            // Fix #19: agregada validación numérica explícita (defensa en profundidad)
+            if (dni.isEmpty() || dni.length < 7 || dni.length > 9 || !dni.all { it.isDigit() }) {
                 etDni.error = getString(R.string.register_error_dni)
                 etDni.requestFocus()
                 return@setOnClickListener
@@ -93,18 +105,18 @@ class RegisterClientActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // 4. Validación de Email (Regex profesional)
-            val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-            if (email.isEmpty() || !email.matches(emailPattern.toRegex())) {
+            // 4. Validación de Email usando el estándar de Android
+            // Fix #11: reemplazado regex manual por Patterns.EMAIL_ADDRESS (más robusto y mantenido por el framework)
+            if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 etEmail.error = getString(R.string.register_error_email)
                 etEmail.requestFocus()
                 return@setOnClickListener
             }
 
             // 5. Validación de Fecha de Nacimiento (OPCIONAL según documento técnico)
-            // Ya no se bloquea si fechaSeleccionada es null
+            // No se bloquea el registro si fechaSeleccionada es null
 
-            // 6. REGLA DE NEGOCIO: Apto físico obligatorio
+            // 6. REGLA DE NEGOCIO: Apto físico obligatorio para registrar
             if (!aptoFisico) {
                 Toast.makeText(
                     this,
@@ -115,9 +127,11 @@ class RegisterClientActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val partes = nombreCompleto.split(" ", limit = 2)
-            val nombre = partes[0]
-            val apellido = if (partes.size > 1) partes[1] else ""
+            // Fix #20: usar regex para separar nombre y apellido correctamente
+            // Evita apellidos vacíos cuando hay múltiples espacios entre palabras
+            val partes   = nombreCompleto.trim().split("\\s+".toRegex(), limit = 2)
+            val nombre   = partes[0].trim()
+            val apellido = if (partes.size > 1) partes[1].trim() else ""
 
             if (clienteDAO.existeDni(dni)) {
                 etDni.error = getString(R.string.register_error_dni_existe)
@@ -132,14 +146,14 @@ class RegisterClientActivity : AppCompatActivity() {
             }
 
             val nuevoCliente = Cliente(
-                nombre = nombre,
-                apellido = apellido,
-                dni = dni,
-                telefono = telefono,
-                email = email,
+                nombre          = nombre,
+                apellido        = apellido,
+                dni             = dni,
+                telefono        = telefono,
+                email           = email,
                 fechaNacimiento = fechaSeleccionada,
-                aptoFisico = aptoFisico,
-                tipo = tipo
+                aptoFisico      = aptoFisico,
+                tipo            = tipo
             )
 
             val resultadoId = clienteDAO.registrarCliente(nuevoCliente)
@@ -151,5 +165,14 @@ class RegisterClientActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.register_error_db), Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    /**
+     * Fix #14: Guarda la fecha seleccionada antes de que el Activity sea destruido
+     * (por rotación de pantalla u otras causas). Se restaura en onCreate().
+     */
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_FECHA_NAC, fechaSeleccionada)
     }
 }

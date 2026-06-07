@@ -8,7 +8,9 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.mobile_club_deportivo.app.dao.ClienteDAO
+import com.example.mobile_club_deportivo.app.dao.CobroDAO
 import com.example.mobile_club_deportivo.app.database.ClubDeportivoDatabase
 import com.example.mobile_club_deportivo.app.models.Cliente
 import com.example.mobile_club_deportivo.app.models.EstadoCliente
@@ -20,6 +22,7 @@ class ManageActivity : AppCompatActivity() {
 
     private lateinit var dbHelper: ClubDeportivoDatabase
     private lateinit var clienteDAO: ClienteDAO
+    private lateinit var cobroDAO: CobroDAO
     private lateinit var container: LinearLayout
     private lateinit var session: SessionManager
 
@@ -28,24 +31,31 @@ class ManageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_manage)
 
         // Inicialización
-        dbHelper = ClubDeportivoDatabase.getInstance(this)
+        dbHelper   = ClubDeportivoDatabase.getInstance(this)
         clienteDAO = ClienteDAO(dbHelper)
-        container = findViewById(R.id.container_manage_list)
-        session = SessionManager(this)
+        cobroDAO   = CobroDAO(dbHelper)
+        container  = findViewById(R.id.container_manage_list)
+        session    = SessionManager(this)
 
         // Cargar nombre real en el header
         val tvUser = findViewById<TextView>(R.id.tv_manage_username)
         tvUser.text = getString(R.string.global_nombre_usuario, session.getNombreUsuario())
 
-        val btnBack = findViewById<ImageButton>(R.id.btn_manage_back)
+        val btnBack   = findViewById<ImageButton>(R.id.btn_manage_back)
         val btnUpdate = findViewById<Button>(R.id.btn_manage_update)
-        val etSearch = findViewById<EditText>(R.id.et_manage_search)
+        val etSearch  = findViewById<EditText>(R.id.et_manage_search)
 
         btnBack.setOnClickListener {
             finish()
         }
 
         btnUpdate.setOnClickListener {
+            // Proceso manual de actualización (decisión del usuario):
+            // 1. Marcar como VENCIDO los cobros cuya fecha_vencimiento ya pasó
+            cobroDAO.marcarCobrosVencidos()
+            // 2. Recalcular el estado ACTIVO/INACTIVO de cada cliente según sus cobros
+            actualizarEstadosClientes()
+            // 3. Refrescar la lista visual con los datos actualizados
             cargarDatos()
             Toast.makeText(this, getString(R.string.manage_toast_actualizado), Toast.LENGTH_SHORT).show()
         }
@@ -67,7 +77,7 @@ class ManageActivity : AppCompatActivity() {
     private fun cargarDatos(busqueda: String? = null) {
         container.removeAllViews()
         val clientes = clienteDAO.obtenerClientes(busqueda)
-        
+
         actualizarResumen()
 
         if (clientes.isEmpty()) {
@@ -93,9 +103,9 @@ class ManageActivity : AppCompatActivity() {
         val headerLayout = (findViewById<LinearLayout>(R.id.layout_manage)).getChildAt(1) as? LinearLayout
         headerLayout?.let {
             val tvCant = it.getChildAt(2) as? TextView
-            val tvFec = it.getChildAt(3) as? TextView
+            val tvFec  = it.getChildAt(3) as? TextView
             tvCant?.text = getString(R.string.manage_tv_cantidad_deudores, cantDeudores)
-            tvFec?.text = getString(R.string.manage_tv_fecha_hoy, fechaHoy)
+            tvFec?.text  = getString(R.string.manage_tv_fecha_hoy, fechaHoy)
         }
     }
 
@@ -104,7 +114,7 @@ class ManageActivity : AppCompatActivity() {
         layout.orientation = LinearLayout.VERTICAL
         layout.setPadding(32, 32, 32, 32)
         layout.setBackgroundResource(R.drawable.bg_contenedor_borde)
-        
+
         val params = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -122,14 +132,15 @@ class ManageActivity : AppCompatActivity() {
         // Uso de strings con placeholders
         layout.addView(crearDatoText(getString(R.string.manage_tv_dni, cliente.dni)))
         layout.addView(crearDatoText(getString(R.string.manage_tv_tel, cliente.telefono)))
-        
+
         if (cliente.numeroSocio != null) {
             layout.addView(crearDatoText(getString(R.string.manage_tv_numero_socio, cliente.numeroSocio.toString())))
         }
-        
+
         val tvEstado = crearDatoText(getString(R.string.manage_tv_estado, cliente.estado.name))
         if (cliente.estado == EstadoCliente.INACTIVO) {
-            tvEstado.setTextColor(Color.RED)
+            // Fix #12b: usar color semántico con buen contraste en lugar de Color.RED puro
+            tvEstado.setTextColor(ContextCompat.getColor(this, R.color.estado_inactivo))
             tvEstado.setTypeface(null, Typeface.BOLD)
         }
         layout.addView(tvEstado)
@@ -165,6 +176,18 @@ class ManageActivity : AppCompatActivity() {
         if (view != null) {
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
+    }
+
+    /**
+     * Recorre todos los clientes y recalcula su estado ACTIVO/INACTIVO
+     * basándose en si tienen cobros con estado VENCIDO en la base de datos.
+     * Llamar siempre después de marcarCobrosVencidos() para mantener consistencia.
+     */
+    private fun actualizarEstadosClientes() {
+        val todosLosClientes = clienteDAO.obtenerClientes()
+        todosLosClientes.forEach { cliente ->
+            cobroDAO.actualizarEstadoCliente(cliente.idCliente)
         }
     }
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="top|center_horizontal"
-    android:background="#F5F5F5">
+    android:background="@color/carnet_fondo">
 
     <LinearLayout
         android:id="@+id/layout_carnet_card"
@@ -21,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#2E7D32"
+            android:background="@color/carnet_header_bg"
             android:padding="12dp"
             android:orientation="horizontal"
             android:gravity="center_vertical">
@@ -42,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/carnet_tv_nombre_club"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@android:color/white"
                     android:textStyle="bold"
                     android:textSize="16sp" />
                 <TextView
@@ -69,47 +70,48 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <!-- Fix #10: tools:text en lugar de android:text para valores de preview -->
                 <TextView
                     android:id="@+id/tv_carnet_nombre"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Nombre Apellido"
+                    tools:text="Nombre Apellido"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="#212121"
+                    android:textColor="@color/carnet_texto_primario"
                     android:layout_marginBottom="4dp" />
 
                 <TextView
                     android:id="@+id/tv_carnet_dni"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DNI: 00.000.000"
+                    tools:text="DNI: 00.000.000"
                     android:textSize="13sp"
-                    android:textColor="#424242" />
+                    android:textColor="@color/carnet_texto_secundario" />
 
                 <TextView
                     android:id="@+id/tv_carnet_tipo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tipo: SOCIO"
+                    tools:text="Tipo: SOCIO"
                     android:textSize="13sp"
-                    android:textColor="#424242" />
+                    android:textColor="@color/carnet_texto_secundario" />
 
                 <TextView
                     android:id="@+id/tv_carnet_tel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Tel: 123456"
+                    tools:text="Tel: 123456"
                     android:textSize="13sp"
-                    android:textColor="#424242" />
+                    android:textColor="@color/carnet_texto_secundario" />
 
                 <TextView
                     android:id="@+id/tv_carnet_email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Email: info@club.com"
+                    tools:text="Email: info@club.com"
                     android:textSize="12sp"
-                    android:textColor="#424242"
+                    android:textColor="@color/carnet_texto_secundario"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
 
@@ -124,40 +126,51 @@
                     android:id="@+id/tv_carnet_nro"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Socio N°: #000"
+                    tools:text="Socio N°: #000"
                     android:textStyle="bold"
                     android:textSize="14sp"
-                    android:textColor="#2E7D32"
+                    android:textColor="@color/carnet_header_bg"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:id="@+id/tv_carnet_emision"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Emisión: 00/00/0000"
+                    tools:text="Emisión: 00/00/0000"
                     android:textSize="10sp"
-                    android:textColor="#757575" />
+                    android:textColor="@color/carnet_texto_opaco" />
 
                 <TextView
                     android:id="@+id/tv_carnet_vencimiento"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Vence: 00/00/0000"
+                    tools:text="Vence: 00/00/0000"
                     android:textStyle="bold"
                     android:textSize="11sp"
-                    android:textColor="#D32F2F" />
+                    android:textColor="@color/carnet_vencimiento" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
+    <!-- Fix #6b: Botón explícito para emitir y persistir el carnet en la base de datos -->
+    <Button
+        android:id="@+id/btn_carnet_emitir"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/carnet_btn_emitir"
+        android:textStyle="bold"
+        android:elevation="4dp" />
+
+    <!-- Fix #13: backgroundTint usa referencia @color en lugar de hex hardcodeado -->
     <Button
         android:id="@+id/btn_carnet_download"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_marginTop="40dp"
-        android:backgroundTint="#2E7D32"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/carnet_header_bg"
         android:text="@string/carnet_btn_descargar"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/white"
         android:textStyle="bold"
         android:elevation="4dp" />
 

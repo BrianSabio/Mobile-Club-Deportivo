@@ -26,7 +26,7 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
             put("apto_fisico", if (cliente.aptoFisico) 1 else 0)
             put("tipo", cliente.tipo.name)
             put("estado", cliente.estado.name)
-            
+
             if (cliente.tipo == TipoCliente.SOCIO) {
                 put("numero_socio", generarProximoNumeroSocio())
             } else {
@@ -44,9 +44,13 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
         return db.rawQuery("SELECT MAX(numero_socio) FROM CLIENTE", null).use { cursor ->
             var proximo = 1
             if (cursor.moveToFirst()) {
-                val maxActual = cursor.getInt(0)
-                if (maxActual > 0) {
-                    proximo = maxActual + 1
+                // Verificar explícitamente si MAX() devolvió NULL (cuando no hay socios aún).
+                // No depender del comportamiento implícito de getInt() que retorna 0 para NULL.
+                if (!cursor.isNull(0)) {
+                    val maxActual = cursor.getInt(0)
+                    if (maxActual > 0) {
+                        proximo = maxActual + 1
+                    }
                 }
             }
             proximo
@@ -75,13 +79,13 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
     fun obtenerClientes(busqueda: String? = null): List<Cliente> {
         val lista = mutableListOf<Cliente>()
         val db = dbHelper.readableDatabase
-        
+
         val selection = if (!busqueda.isNullOrBlank()) {
             "nombre LIKE ? OR apellido LIKE ? OR dni LIKE ?"
         } else {
             null
         }
-        
+
         val selectionArgs = if (!busqueda.isNullOrBlank()) {
             val query = "%$busqueda%"
             arrayOf(query, query, query)
@@ -101,19 +105,19 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
             if (cursor.moveToFirst()) {
                 do {
                     val cliente = Cliente(
-                        idCliente = cursor.getInt(cursor.getColumnIndexOrThrow("id_cliente")),
-                        nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
-                        apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
-                        dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
-                        telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
-                        email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                        idCliente       = cursor.getInt(cursor.getColumnIndexOrThrow("id_cliente")),
+                        nombre          = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        apellido        = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                        dni             = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                        telefono        = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                        email           = cursor.getString(cursor.getColumnIndexOrThrow("email")),
                         fechaNacimiento = cursor.getString(cursor.getColumnIndexOrThrow("fecha_nacimiento")),
-                        aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
-                        tipo = TipoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("tipo"))),
-                        numeroSocio = if (cursor.isNull(cursor.getColumnIndexOrThrow("numero_socio"))) null 
-                                     else cursor.getInt(cursor.getColumnIndexOrThrow("numero_socio")),
-                        estado = EstadoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("estado"))),
-                        fechaRegistro = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
+                        aptoFisico      = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
+                        tipo            = TipoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("tipo"))),
+                        numeroSocio     = if (cursor.isNull(cursor.getColumnIndexOrThrow("numero_socio"))) null
+                                         else cursor.getInt(cursor.getColumnIndexOrThrow("numero_socio")),
+                        estado          = EstadoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("estado"))),
+                        fechaRegistro   = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
                     )
                     lista.add(cliente)
                 } while (cursor.moveToNext())
@@ -142,7 +146,7 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
     fun buscarPorCriterio(criterio: String): Cliente? {
         val db = dbHelper.readableDatabase
         val nroSocio = criterio.toIntOrNull()
-        
+
         val selection = if (nroSocio != null) "dni = ? OR numero_socio = ?" else "dni = ?"
         val selectionArgs = if (nroSocio != null) arrayOf(criterio, criterio) else arrayOf(criterio)
 
@@ -155,19 +159,55 @@ class ClienteDAO(private val dbHelper: ClubDeportivoDatabase) {
         ).use { cursor ->
             if (cursor.moveToFirst()) {
                 Cliente(
-                    idCliente = cursor.getInt(cursor.getColumnIndexOrThrow("id_cliente")),
-                    nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
-                    apellido = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
-                    dni = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
-                    telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
-                    email = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                    idCliente       = cursor.getInt(cursor.getColumnIndexOrThrow("id_cliente")),
+                    nombre          = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                    apellido        = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                    dni             = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                    telefono        = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                    email           = cursor.getString(cursor.getColumnIndexOrThrow("email")),
                     fechaNacimiento = cursor.getString(cursor.getColumnIndexOrThrow("fecha_nacimiento")),
-                    aptoFisico = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
-                    tipo = TipoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("tipo"))),
-                    numeroSocio = if (cursor.isNull(cursor.getColumnIndexOrThrow("numero_socio"))) null 
-                                 else cursor.getInt(cursor.getColumnIndexOrThrow("numero_socio")),
-                    estado = EstadoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("estado"))),
-                    fechaRegistro = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
+                    aptoFisico      = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
+                    tipo            = TipoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("tipo"))),
+                    numeroSocio     = if (cursor.isNull(cursor.getColumnIndexOrThrow("numero_socio"))) null
+                                     else cursor.getInt(cursor.getColumnIndexOrThrow("numero_socio")),
+                    estado          = EstadoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("estado"))),
+                    fechaRegistro   = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
+                )
+            } else {
+                null
+            }
+        }
+    }
+
+    /**
+     * Obtiene un cliente específico por su ID primario.
+     * Realiza un query directo WHERE id_cliente = ?, sin cargar toda la tabla en memoria.
+     * Usar siempre en lugar de obtenerClientes().find{} para evitar consumo innecesario de memoria.
+     */
+    fun obtenerClientePorId(idCliente: Int): Cliente? {
+        val db = dbHelper.readableDatabase
+        return db.query(
+            "CLIENTE",
+            null,
+            "id_cliente = ?",
+            arrayOf(idCliente.toString()),
+            null, null, null, "1"
+        ).use { cursor ->
+            if (cursor.moveToFirst()) {
+                Cliente(
+                    idCliente       = cursor.getInt(cursor.getColumnIndexOrThrow("id_cliente")),
+                    nombre          = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                    apellido        = cursor.getString(cursor.getColumnIndexOrThrow("apellido")),
+                    dni             = cursor.getString(cursor.getColumnIndexOrThrow("dni")),
+                    telefono        = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                    email           = cursor.getString(cursor.getColumnIndexOrThrow("email")),
+                    fechaNacimiento = cursor.getString(cursor.getColumnIndexOrThrow("fecha_nacimiento")),
+                    aptoFisico      = cursor.getInt(cursor.getColumnIndexOrThrow("apto_fisico")) == 1,
+                    tipo            = TipoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("tipo"))),
+                    numeroSocio     = if (cursor.isNull(cursor.getColumnIndexOrThrow("numero_socio"))) null
+                                     else cursor.getInt(cursor.getColumnIndexOrThrow("numero_socio")),
+                    estado          = EstadoCliente.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("estado"))),
+                    fechaRegistro   = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro"))
                 )
             } else {
                 null

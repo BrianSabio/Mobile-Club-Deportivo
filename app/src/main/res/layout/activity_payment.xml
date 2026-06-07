@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
     android:paddingBottom="16dp"
     android:paddingTop="28dp"
     tools:context=".PaymentActivity">
@@ -82,24 +82,28 @@
                 android:layout_marginBottom="8dp" />
 
             <TextView
+                android:id="@+id/tv_payment_member_dni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_dni"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_payment_member_nro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_nro_socio"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_payment_member_estado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_estado"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_payment_member_deuda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_deuda_pendiente"
@@ -168,18 +172,21 @@
                 android:layout_marginBottom="8dp" />
 
             <TextView
+                android:id="@+id/tv_payment_non_member_dni"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_dni"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_payment_non_member_tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_telefono"
                 android:textSize="16sp" />
 
             <TextView
+                android:id="@+id/tv_payment_non_member_actividad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_actividad_gimnasio"
@@ -187,6 +194,7 @@
                 android:layout_marginTop="4dp" />
 
             <TextView
+                android:id="@+id/tv_payment_non_member_monto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/payment_tv_monto_pagar"
